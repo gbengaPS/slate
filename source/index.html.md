@@ -1,239 +1,203 @@
 ---
-title: API Reference
+title: POSTIT API DOCUMENTATION
 
 language_tabs: # must be one of https://git.io/vQNgJ
-  - shell
-  - ruby
-  - python
-  - javascript
+  - json: JSON
 
 toc_footers:
-  - <a href='#'>Sign Up for a Developer Key</a>
+  - <p><a href='https://travis-ci.org/gbengaPS/postit'> <img src='https://travis-ci.org/gbengaPS/postit.svg?branch=develop'/> </a></p>
   - <a href='https://github.com/tripit/slate'>Documentation Powered by Slate</a>
 
 includes:
-  - errors
+  - groups
 
 search: true
 ---
 
 # Introduction
 
-Welcome to the Kittn API! You can use our API to access Kittn API endpoints, which can get information on various cats, kittens, and breeds in our database.
+Welcome to the PostIt API! . PostIt is a group messaging application. It allows you create groups,
+add users, and send prioritzed messages to these groups.
 
-We have language bindings in Shell, Ruby, and Python! You can view code examples in the dark area to the right, and you can switch the programming language of the examples with the tabs in the top right.
+Our API allows you do the above mentioned and more.
 
-This example API documentation page was created with [Slate](https://github.com/tripit/slate). Feel free to edit it and use it as a base for your own API's documentation.
 
-# Authentication
+# Users
 
-> To authorize, use this code:
+## User Signup
+> Sample user details:
 
-```ruby
-require 'kittn'
-
-api = Kittn::APIClient.authorize!('meowmeowmeow')
-```
-
-```python
-import kittn
-
-api = kittn.authorize('meowmeowmeow')
-```
-
-```shell
-# With shell, you can just pass the correct header with each request
-curl "api_endpoint_here"
-  -H "Authorization: meowmeowmeow"
-```
-
-```javascript
-const kittn = require('kittn');
-
-let api = kittn.authorize('meowmeowmeow');
-```
-
-> Make sure to replace `meowmeowmeow` with your API key.
-
-Kittn uses API keys to allow access to the API. You can register a new Kittn API key at our [developer portal](http://example.com/developers).
-
-Kittn expects for the API key to be included in all API requests to the server in a header that looks like the following:
-
-`Authorization: meowmeowmeow`
-
-<aside class="notice">
-You must replace <code>meowmeowmeow</code> with your personal API key.
-</aside>
-
-# Kittens
-
-## Get All Kittens
-
-```ruby
-require 'kittn'
-
-api = Kittn::APIClient.authorize!('meowmeowmeow')
-api.kittens.get
-```
-
-```python
-import kittn
-
-api = kittn.authorize('meowmeowmeow')
-api.kittens.get()
-```
-
-```shell
-curl "http://example.com/api/kittens"
-  -H "Authorization: meowmeowmeow"
-```
-
-```javascript
-const kittn = require('kittn');
-
-let api = kittn.authorize('meowmeowmeow');
-let kittens = api.kittens.get();
+```json
+ {
+   "fullName": "test",
+   "username": "test_user",
+   "email": "test.user@gmail.com",
+   "phoneNumber": "09025615565",
+   "password": "password"
+ }
 ```
 
 > The above command returns JSON structured like this:
 
 ```json
-[
-  {
-    "id": 1,
-    "name": "Fluffums",
-    "breed": "calico",
-    "fluffiness": 6,
-    "cuteness": 7
-  },
-  {
-    "id": 2,
-    "name": "Max",
-    "breed": "unknown",
-    "fluffiness": 5,
-    "cuteness": 10
-  }
-]
+{
+    "user": {
+        "id": 80,
+        "fullName": "test user",
+        "username": "test_user",
+        "email": "test.user@gmail.com",
+        "phoneNumber": "09025615565",
+        "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ODAsImZ1bGxOYW1lIjoidGVzdCB1c2VyIiwiZW1haWwiOiJ0ZXN0LnVzZXJAZ21haWwuY29tIiwicGhvbmVOdW1iZXIiOiIwOTAyNTYxNTU2NSIsImlhdCI6MTUxMTM0MDg1MSwiZXhwIjoxNTQyODc2ODUxfQ.6L3AIXfU307YRfPkZG4wnYDBZvUWDBWxOrdfkWUtf_o"
+    },
+    "message": "User test_user was created successfully"
+}
 ```
 
-This endpoint retrieves all kittens.
+This endpoint creates a new user account.
+
+`POST http://postit-gbenga.herokuapp.com/api/user/signup`
 
 ### HTTP Request
-
-`GET http://example.com/api/kittens`
 
 ### Query Parameters
+<aside class="warning">All fields are required </aside>
+Parameter| Description
+--------- | -----------
+fullName |  Full name of the user.
+username|  Username (no special characters aside from an underscore _).
+email | User email
+phoneNumber | User phone number
+password | User password (not less than 6 characters)
 
-Parameter | Default | Description
---------- | ------- | -----------
-include_cats | false | If set to true, the result will also include cats.
-available | true | If set to false, the result will include kittens that have already been adopted.
+## User Signin
+> Sample registered user details:
 
-<aside class="success">
-Remember — a happy kitten is an authenticated kitten!
-</aside>
-
-## Get a Specific Kitten
-
-```ruby
-require 'kittn'
-
-api = Kittn::APIClient.authorize!('meowmeowmeow')
-api.kittens.get(2)
-```
-
-```python
-import kittn
-
-api = kittn.authorize('meowmeowmeow')
-api.kittens.get(2)
-```
-
-```shell
-curl "http://example.com/api/kittens/2"
-  -H "Authorization: meowmeowmeow"
-```
-
-```javascript
-const kittn = require('kittn');
-
-let api = kittn.authorize('meowmeowmeow');
-let max = api.kittens.get(2);
+```json
+  {
+    "username":"test_user",
+    "password": "password"
+  }
 ```
 
 > The above command returns JSON structured like this:
 
 ```json
 {
-  "id": 2,
-  "name": "Max",
-  "breed": "unknown",
-  "fluffiness": 5,
-  "cuteness": 10
+    "user": {
+        "id": 80,
+        "fullName": "test user",
+        "username": "test_user",
+        "email": "test.user@gmail.com",
+        "phoneNumber": "09025615565",
+        "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ODAsImZ1bGxOYW1lIjoidGVzdCB1c2VyIiwiZW1haWwiOiJ0ZXN0LnVzZXJAZ21haWwuY29tIiwicGhvbmVOdW1iZXIiOiIwOTAyNTYxNTU2NSIsImlhdCI6MTUxMTM0MTM4OCwiZXhwIjoxNTQyODc3Mzg4fQ.uaXCpn4ztgvSxuNvRbj5ZaY2Kaipe2_lah5lQOwk57U"
+    }
 }
 ```
 
-This endpoint retrieves a specific kitten.
-
-<aside class="warning">Inside HTML code blocks like this one, you can't use Markdown, so use <code>&lt;code&gt;</code> blocks to denote code.</aside>
+This endpoint signs in a registered user.
 
 ### HTTP Request
 
-`GET http://example.com/kittens/<ID>`
+`POST http://postit-gbenga.herokuapp.com/api/user/signin`
 
 ### URL Parameters
 
 Parameter | Description
 --------- | -----------
-ID | The ID of the kitten to retrieve
+username | Username or email of the user
+password | User password
 
-## Delete a Specific Kitten
+## Search users
 
-```ruby
-require 'kittn'
+ This endpoint returns users that match the search query
 
-api = Kittn::APIClient.authorize!('meowmeowmeow')
-api.kittens.delete(2)
+`GET http://postit-gbenga.herokuapp.com/api/user/search?query=query`
+
+Sample query URL
+
+http://postit-gbenga.herokuapp.com/api/user/search?query=s&offset=0&limit=3
+
+> Response
+
+```json
+ {
+    "pageCount": 3,
+    "count": 9,
+    "users": [
+        {
+            "id": 1,
+            "username": "test23",
+            "fullName": "Mr test",
+            "email": "test23@gmail.com",
+            "phoneNumber": "23480641406954"
+        },
+        {
+            "id": 80,
+            "username": "test_user",
+            "fullName": "test user",
+            "email": "test.user@gmail.com",
+            "phoneNumber": "09025615565"
+        },
+        {
+            "id": 6,
+            "username": "Jason",
+            "fullName": "Jason Nelson",
+            "email": "jason@gmail.com",
+            "phoneNumber": "080641406954"
+        }
+    ]
+}
 ```
 
-```python
-import kittn
+## Password Reset
+ This endpoint allows a user request a password reset
 
-api = kittn.authorize('meowmeowmeow')
-api.kittens.delete(2)
-```
+  `POST http://postit-gbenga.herokuapp.com/api/user/password/reset`
 
-```shell
-curl "http://example.com/api/kittens/2"
-  -X DELETE
-  -H "Authorization: meowmeowmeow"
-```
-
-```javascript
-const kittn = require('kittn');
-
-let api = kittn.authorize('meowmeowmeow');
-let max = api.kittens.delete(2);
-```
-
-> The above command returns JSON structured like this:
+>Sample request
 
 ```json
 {
-  "id": 2,
-  "deleted" : ":("
+  "email": "test.user@gmail.com",
 }
 ```
+> Response
 
-This endpoint retrieves a specific kitten.
-
-### HTTP Request
-
-`DELETE http://example.com/kittens/<ID>`
+```json
+ {
+    "message": "Mail sent successfully"
+ }
+```
 
 ### URL Parameters
 
-Parameter | Description
---------- | -----------
-ID | The ID of the kitten to delete
+  Prameter  | Description
+  --------- | ----------
+  email     | User email address
+
+## Password Update
+ This endpoint helps a user update his password
+
+ `POST http://postit-gbenga.herokuapp.com/api/user/password/update?token=usertoken`
+
+ >Sample request
+
+```json
+{
+  "password": "password",
+}
+```
+> Response
+
+```json
+ {
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NTUsImZ1bGxOYW1lIjoic2FtIGFkZXllbWkiLCJlbWFpbCI6ImlveWV0YWRlQGdtYWlsLmNvbSIsInBob25lTnVtYmVyIjoiOTExIiwiaWF0IjoxNTExMzUwNDMxLCJleHAiOjE1NDI4ODY0MzF9.vseweDoDgOMjL_PWA6oEf1rZTsIgrFYdyRFffd97Ul4"
+}
+```
+
+### URL Parameters
+
+  Prameter  | Description
+  --------- | ----------
+  password  | New user password
 
