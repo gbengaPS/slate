@@ -10,6 +10,7 @@ toc_footers:
 
 includes:
   - groups
+  - errors
 
 search: true
 ---
@@ -59,7 +60,7 @@ This endpoint creates a new user account.
 
 ### HTTP Request
 
-### Query Parameters
+### Body Parameters
 <aside class="warning">All fields are required </aside>
 Parameter| Description
 --------- | -----------
@@ -68,6 +69,10 @@ username|  Username (no special characters aside from an underscore _).
 email | User email
 phoneNumber | User phone number
 password | User password (not less than 6 characters)
+
+### Response
+* Status code `201: Created`
+* Body `(application/json)`
 
 ## User Signin
 > Sample registered user details:
@@ -100,57 +105,76 @@ This endpoint signs in a registered user.
 
 `POST http://postit-gbenga.herokuapp.com/api/user/signin`
 
-### URL Parameters
+### Body Parameters
 
 Parameter | Description
 --------- | -----------
 username | Username or email of the user
 password | User password
 
+### Response
+* Status code `200: OK`
+* Body `(application/json)`
+
 ## Search users
 
  This endpoint returns users that match the search query
 
-`GET http://postit-gbenga.herokuapp.com/api/user/search?query=query`
+<aside class="warning">
+  The `x-access-token` header is needed to access this endpoint
+</aside>
+`GET http://postit-gbenga.herokuapp.com/api/user/search`
 
-Sample query URL
+### Query Parameter
 
-http://postit-gbenga.herokuapp.com/api/user/search?query=s&offset=0&limit=3
+Parameter | Description
+--------- | -----------
+query | The search query
+offset | Determines the result offset (integer value)
+limit | The number of results per page (default is 10)
+
+Sample query
+
+`http://postit-gbenga.herokuapp.com/api/user/search?query=ade&offset=0&limit=3`
+
+### Response
+* Status code `200: OK`
+* Body `(application/json)`
 
 > Response
 
 ```json
- {
-    "pageCount": 3,
-    "count": 9,
+{
+    "pageCount": 1,
+    "count": 3,
     "users": [
         {
-            "id": 1,
-            "username": "test23",
-            "fullName": "Mr test",
-            "email": "test23@gmail.com",
-            "phoneNumber": "23480641406954"
-        },
-        {
-            "id": 80,
-            "username": "test_user",
-            "fullName": "test user",
-            "email": "test.user@gmail.com",
-            "phoneNumber": "09025615565"
+            "id": 4,
+            "username": "gbenga_ps",
+            "fullName": "Gbenga Elijah Oyetade",
+            "email": "ioyetade@gmail.com",
+            "phoneNumber": "09025615564"
         },
         {
             "id": 6,
-            "username": "Jason",
-            "fullName": "Jason Nelson",
-            "email": "jason@gmail.com",
-            "phoneNumber": "080641406954"
+            "username": "python",
+            "fullName": "Ade Man",
+            "email": "ade@we.com",
+            "phoneNumber": "08077567485"
+        },
+        {
+            "id": 16,
+            "username": "adebisi",
+            "fullName": "Adebisi Gbadebo",
+            "email": "gbadebo_adebisi@gmail.com",
+            "phoneNumber": "2348064130196"
         }
     ]
 }
 ```
 
 ## Password Reset
- This endpoint allows a user request a password reset
+ This endpoint helps a user update his password
 
   `POST http://postit-gbenga.herokuapp.com/api/user/password/reset`
 
@@ -175,6 +199,10 @@ http://postit-gbenga.herokuapp.com/api/user/search?query=s&offset=0&limit=3
   --------- | ----------
   email     | User email address
 
+### Response
+* Status code `200: OK`
+* Body `(application/json)`
+
 ## Password Update
  This endpoint helps a user update his password
 
@@ -191,13 +219,23 @@ http://postit-gbenga.herokuapp.com/api/user/search?query=s&offset=0&limit=3
 
 ```json
  {
-    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NTUsImZ1bGxOYW1lIjoic2FtIGFkZXllbWkiLCJlbWFpbCI6ImlveWV0YWRlQGdtYWlsLmNvbSIsInBob25lTnVtYmVyIjoiOTExIiwiaWF0IjoxNTExMzUwNDMxLCJleHAiOjE1NDI4ODY0MzF9.vseweDoDgOMjL_PWA6oEf1rZTsIgrFYdyRFffd97Ul4"
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NTUsImZ1bGxOYW1lIjoic2FtIGFkZXllbWkiLCJlbWFpbCI6ImlveWV0YWRlQGdtYWlsLmNvbSIsInBob25lTnVtYmVyIjoiOTExIiwiaWF0IjoxNTExMzUwNDMxLCJleHAiOjE1NDI4ODY0MzF9.vseweDoDgOMjL_PWA6oEf1rZTsIgrFYdyRFffd97Ul4",
+    "message": "Password updated successfully"
 }
 ```
 
-### URL Parameters
+### Body Parameters
 
   Prameter  | Description
   --------- | ----------
   password  | New user password
 
+### Query Parameters
+
+  Prameter  | Description
+  --------- | ----------
+  token  | token sent to the user's email
+
+### Response
+* Status code `200: OK`
+* Body `(application/json)`

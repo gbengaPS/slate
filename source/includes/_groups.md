@@ -17,9 +17,12 @@
 
 ```json
   {
-    "groupId": 1,
-    "groupName": "test group name",
-    "groupDescription": "test group description"
+    "group": {
+        "groupId": 1,
+        "groupName": "test group name",
+        "groupDescription": "test group description"
+    },
+    "message": "Group created successfully"
   }
 
 ```
@@ -27,18 +30,25 @@
 
 `POST http://postit-gbenga.herokuapp.com/api/group`
 
-### URL Parameters
+### Body Parameters
 
 Parameter | Description
 --------- | -----------
 groupName | The unique name of the group
 groupDescription | The description of the group
 
+### Response
+* Status code `201: created`
+* Body `(application/json)`
 
 ## Get user groups
 This endpoint gets the group a user belongs to
 
 `GET http://postit-gbenga.herokuapp.com/api/group/user`
+
+### Response
+* Status code `200: OK`
+* Body `(application/json)`
 
 >Response
 
@@ -85,27 +95,65 @@ This endpoint gets the group a user belongs to
 This endpoint gets the group members from a group provider
 current user belongs to the group
 
+### Path Parameter
+
+Parameter | Description
+--------- | -----------
+groupId | The id of the group to fetch from
+
 `GET http://postit-gbenga.herokuapp.com/api/group/:groupId/users`
+
+### Response
+* Status code `200: OK`
+* Body `(application/json)`
 
 > Response
 
 ```json
 {
-    "users": [
+    "members": [
         {
-            "id": 1,
-            "username": "test23",
-            "fullName": "Mr test",
-            "email": "test23@gmail.com",
-            "phoneNumber": "23480641406954",
+            "id": 6,
+            "username": "python",
+            "fullName": "Ade Man",
+            "email": "ade@we.com",
+            "phoneNumber": "08077567485",
             "groupMembers": {
-                "userId": 1,
+                "userId": 6,
                 "addedBy": 1,
                 "groupId": 1,
-                "createdAt": "2017-09-06T16:35:02.731Z",
-                "updatedAt": "2017-09-06T16:35:02.731Z"
+                "createdAt": "2017-12-11T23:44:42.686Z",
+                "updatedAt": "2017-12-11T23:44:42.686Z"
             }
         },
+        {
+            "id": 7,
+            "username": "aliveli",
+            "fullName": "ali veli",
+            "email": "aliveli@gmail.com",
+            "phoneNumber": "905533558787",
+            "groupMembers": {
+                "userId": 7,
+                "addedBy": 1,
+                "groupId": 1,
+                "createdAt": "2017-12-17T12:28:14.263Z",
+                "updatedAt": "2017-12-17T12:28:14.263Z"
+            }
+        },
+        {
+            "id": 9,
+            "username": "topeooo",
+            "fullName": "Temitope Joloko",
+            "email": "temitope@gmail.com",
+            "phoneNumber": "2348064140695",
+            "groupMembers": {
+                "userId": 9,
+                "addedBy": 1,
+                "groupId": 1,
+                "createdAt": "2017-12-18T07:59:15.127Z",
+                "updatedAt": "2017-12-18T07:59:15.127Z"
+            }
+        }
     ]
 }
 ```
@@ -137,16 +185,36 @@ This endpoint adds a user to the group
 
 `POST http://postit-gbenga.herokuapp.com/api/group/:groupId/user`
 
-### URL Parameter
+### Body Parameter
 
 Parameter | Description
 --------- | -----------
 userId   | The id of the user to be added
 
+### Path Parameter
+
+Parameter | Description
+--------- | -----------
+groupId | The id of the group to add new user to
+
+### Response
+* Status code `201: created`
+* Body `(application/json)`
+
 ## Leave group
 This endpoint removes the user from the group
 
 `DELETE http://postit-gbenga.herokuapp.com/api/group/:groupId/leave`
+
+### Path Parameter
+
+Parameter | Description
+--------- | -----------
+groupId | The id of the group user is to leave
+
+### Response
+* Status code `200: OK`
+* Body `(application/json)`
 
 >Response
 
@@ -158,7 +226,24 @@ This endpoint removes the user from the group
 ## Post message
 This endpoint sends a message to a group
 
+### Body Parameter
+
+Parameter | Description
+--------- | -----------
+messageBody | The message to be sent
+messagePriority | This could be Normal, Urgent or Critical
+
+### Path Parameter
+
+Parameter | Description
+--------- | -----------
+groupId | The id of the group to post message to
+
 `POST http://postit-gbenga.herokuapp.com/api/group/:groupId/message`
+
+### Response
+* Status code `201: created`
+* Body `(application/json)`
 
 >Request
 
@@ -187,6 +272,16 @@ This endpoint sends a message to a group
 This endpoint gets all the messages sent to a group
 
 `GET http://postit-gbenga.herokuapp.com/api/group/:groupId/messages`
+
+### Path Parameter
+
+Parameter | Description
+--------- | -----------
+groupId | The id of the group to get messages from
+
+### Response
+* Status code `200: OK`
+* Body `(application/json)`
 
 >Response
 
